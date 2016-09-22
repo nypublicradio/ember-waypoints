@@ -1,4 +1,5 @@
 import Ember from 'ember';
+import Waypoint from 'waypoints';
 
 var getProperties = Ember.getProperties;
 var bind = Ember.run.bind;
@@ -11,16 +12,19 @@ export default Ember.Component.extend({
   continuous: null,
   horizontal: null,
 
-  waypoint: function() {
+  waypoint(options) {
     if (typeof document === 'undefined') {
       return;
     }
-
-    var element = this.$();
-
-    if (!element.waypoint) { return; }
-
-    element.waypoint.apply(element, arguments);
+    let waypoint;
+    
+    if (options.sticky) {
+      waypoint = new Waypoint.Sticky(options);
+    } else {
+      waypoint = new Waypoint(options);
+    }
+    
+    this.set('_waypoint', waypoint);
   },
 
   didInsertElement() {
@@ -28,11 +32,11 @@ export default Ember.Component.extend({
   },
 
   willDestroyElement() {
-    this.waypoint('destroy');
+    this.get('_waypoint').destroy();
   },
 
   buildOptions: function() {
-    var options = getProperties(this, [ 'contextElementId', 'offset', 'triggerOnce', 'continuous', 'horizontal']);
+    var options = getProperties(this, ['contextElementId', 'offset', 'triggerOnce', 'continuous', 'horizontal', 'sticky', 'wrapper', 'element', 'stuckClass']);
     options.handler = bind(this, this.waypointTriggered);
 
     for (var option in options) {
