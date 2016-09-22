@@ -2,7 +2,6 @@ import Ember from 'ember';
 
 var getProperties = Ember.getProperties;
 var bind = Ember.run.bind;
-var on = Ember.on;
 var isNone = Ember.isNone;
 
 export default Ember.Component.extend({
@@ -24,13 +23,13 @@ export default Ember.Component.extend({
     element.waypoint.apply(element, arguments);
   },
 
-  setupWaypoint: on('didInsertElement', function() {
+  didInsertElement() {
     this.waypoint(this.buildOptions());
-  }),
+  },
 
-  teardownWaypoint: on('willDestroyElement', function() {
+  willDestroyElement() {
     this.waypoint('destroy');
-  }),
+  },
 
   buildOptions: function() {
     var options = getProperties(this, [ 'contextElementId', 'offset', 'triggerOnce', 'continuous', 'horizontal']);
