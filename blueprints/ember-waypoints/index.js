@@ -1,9 +1,9 @@
 module.exports = {
-  description: 'Add bower dependencies for jquery-waypoints',
+  description: 'Add bower dependencies for waypoints',
 
   normalizeEntityName: function() {}, // no-op since we're just adding dependencies
 
   afterInstall: function() {
-    return this.addBowerPackageToProject('jquery-waypoints', '~2.0.5');
+    return this.addBowerPackageToProject('waypoints', '~4.0.0');
   }
 };
