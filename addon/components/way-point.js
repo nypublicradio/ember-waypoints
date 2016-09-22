@@ -1,11 +1,10 @@
-import Ember from 'ember';
+import Component from 'ember-component';
+import { bind } from 'ember-runloop';
+import { getProperties } from 'ember-metal/get';
+import { isNone } from 'ember-utils'
 import Waypoint from 'waypoints';
 
-var getProperties = Ember.getProperties;
-var bind = Ember.run.bind;
-var isNone = Ember.isNone;
-
-export default Ember.Component.extend({
+export default Component.extend({
   contextElement: null,
   offset: null,
   triggerOnce: null,
