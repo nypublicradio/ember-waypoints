@@ -1,12 +1,15 @@
-var fs = require('fs');
-var path = require('path');
-
 module.exports = {
   name: 'ember-waypoints',
 
-  contentFor: function(type) {
-    if (type === 'vendor-suffix') {
-      return 'if (typeof(document) !== "undefined") {\n' + fs.readFileSync(path.join(this.project.bowerDirectory + '/jquery-waypoints/waypoints.js')) + '\n}';
+  included: function(app) {
+    var options = app.options['ember-waypoints'] || {};
+    
+    this._super.included(app);
+    
+    app.import(app.bowerDirectory + '/waypoints/lib/noframework.waypoints.js');
+    if (options.sticky) {
+      app.import(app.bowerDirectory + '/waypoints/lib/shortcuts/sticky.js');
     }
+    app.import('vendor/shims/waypoints.js');
   }
 }
