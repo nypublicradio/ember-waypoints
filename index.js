@@ -1,15 +1,54 @@
+'use strict';
+
+var path = require('path');
+var Funnel = require('broccoli-funnel');
+var mergeTrees = require('broccoli-merge-trees');
+
 module.exports = {
   name: 'ember-waypoints',
+  included: function(app, parentAddon) {
+    this._super.included.apply(this, arguments);
 
-  included: function(app) {
-    var options = app.options['ember-waypoints'] || {};
-    
-    this._super.included(app);
-    
-    app.import(app.bowerDirectory + '/waypoints/lib/noframework.waypoints.js');
-    if (options.sticky) {
-      app.import(app.bowerDirectory + '/waypoints/lib/shortcuts/sticky.js');
+    if (!app.options.useWaypoints) {
+      return;
     }
+    var target = parentAddon || app;
+
+    while (target.app && !target.bowerDirectory) {
+      target = target.app;
+    }
+
+    target.import({
+      development: 'vendor/third-party/jquery.waypoints.js',
+      production: 'vendor/third-party/jquery.waypoints.min.js',
+    });
+
+    target.import({
+      development: 'vendor/third-party/sticky.js',
+      production: 'vendor/third-party/sticky.min.js'
+    });
+    
     app.import('vendor/shims/waypoints.js');
-  }
-}
+  },
+  treeForVendor(vendorTree) {
+    var waypointsTree = new Funnel(path.dirname(require.resolve('waypoints/lib/waypoints.debug.js')), {
+      files: [
+        'jquery.waypoints.js',
+        'jquery.waypoints.min.js',
+      ],
+      destDir: 'third-party'
+    });
+
+    var stickyTree = new Funnel(path.dirname(require.resolve('waypoints/lib/shortcuts/sticky.js')), {
+      files: [
+        'sticky.js',
+        'sticky.min.js',
+      ],
+      destDir: 'third-party'
+    });
+
+    return mergeTrees([vendorTree, waypointsTree, stickyTree]);
+
+  },
+  isDevelopingAddon: () => true
+};
