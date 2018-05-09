@@ -1,7 +1,6 @@
-import Ember from 'ember';
-
-var set = Ember.set;
-var get = Ember.get;
+import { A } from '@ember/array';
+import Route from '@ember/routing/route';
+import { set, get } from '@ember/object';
 
 function generateWaypointActionHandler(actionName) {
   return function() {
@@ -20,11 +19,11 @@ function generateWaypointActionHandler(actionName) {
   };
 }
 
-export default Ember.Route.extend({
+export default Route.extend({
   init: function() {
     this._super();
 
-    var firedActions = Ember.A();
+    var firedActions = A();
     set(this, 'router.namespace.firedActions', firedActions);
   },
 

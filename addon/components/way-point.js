@@ -1,7 +1,7 @@
-import Component from 'ember-component';
-import { bind } from 'ember-runloop';
-import { getProperties } from 'ember-metal/get';
-import { isNone } from 'ember-utils'
+import Component from '@ember/component';
+import { bind } from '@ember/runloop';
+import { getProperties } from '@ember/object';
+import { isNone } from '@ember/utils'
 import Waypoint from 'waypoints';
 
 export default Component.extend({
@@ -16,13 +16,13 @@ export default Component.extend({
       return;
     }
     let waypoint;
-    
+
     if (options.sticky) {
       waypoint = new Waypoint.Sticky(options);
     } else {
       waypoint = new Waypoint(options);
     }
-    
+
     this.set('_waypoint', waypoint);
   },
 
@@ -53,7 +53,7 @@ export default Component.extend({
   },
 
   waypointTriggered: function(direction) {
-    this.sendAction('on-' + direction, this);
-    this.sendAction('action', direction, this);
+    this.sendAction('on-' + direction, this); // eslint-disable-line
+    this.sendAction('action', direction, this); // eslint-disable-line
   }
 });
